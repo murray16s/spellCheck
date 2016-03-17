@@ -11,6 +11,7 @@ with open(wordFileName, "r") as wordFile:
         words.append(line.lower())
 trie = marisa_trie.Trie(words)
 suggestions = []
+sug = []
 with open(testFileName, "r") as testFile:
     lineNum = 0
     for line in testFile:
@@ -21,8 +22,15 @@ with open(testFileName, "r") as testFile:
                 if(char in sym):
                     word = word.replace(char, "")
             word = word.lower()
-            for i  in range(1, len(word)):
-                temp = trie.keys(word[0:i])
-            #print(temp)
             if not(word in trie):
                 print(str(lineNum) + ": " + word)
+                for i  in range(1, len(word)-1):
+                    #print("**********" + i + "**********")
+                    temp = trie.keys(word[0:len(word)-i])
+                    #print(temp)
+                    for key in temp:
+                        sug.append(key)
+                    for key in sug:
+                        if not(key in suggestions) and (len(suggestions) <= 10):
+                            suggestions.append(key)
+                print(suggestions)
